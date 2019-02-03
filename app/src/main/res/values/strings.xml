@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Countries AndSky90</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list_of_countries">List of countries:</string>
+    <string name="flag">The flag of a country</string>
+    <string name="currency">Currency:</string>
+    <string name="capital">Capital:</string>
+</resources>
