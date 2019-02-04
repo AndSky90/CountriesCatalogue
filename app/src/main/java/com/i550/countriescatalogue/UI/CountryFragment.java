@@ -1,6 +1,5 @@
 package com.i550.countriescatalogue.UI;
 
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.i550.countriescatalogue.App;
 import com.i550.countriescatalogue.Model.Country;
 import com.i550.countriescatalogue.Model.CurrencyOfCountry;
 import com.i550.countriescatalogue.R;
@@ -21,20 +21,14 @@ import com.i550.countriescatalogue.R;
 public class CountryFragment extends Fragment {
 
     private static final String PARAM_KEY = "key";
-    private static final String FIELD_KEY = "numericCode";
+    private static final String NUMERIC_CODE_KEY = "numericCode";
     private Realm realm;
-    private String key;
+    private Long numericCode;
 
-
-    public CountryFragment() {
-    }
-
-    private Country country;
-
-    public static CountryFragment newInstance(String param1) {
+    public static CountryFragment newInstance(Long numericCode) {
         CountryFragment fragment = new CountryFragment();
         Bundle args = new Bundle();
-        args.putString(PARAM_KEY, param1);
+        args.putLong(PARAM_KEY, numericCode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,7 +37,7 @@ public class CountryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            key = getArguments().getString(PARAM_KEY);
+            numericCode = getArguments().getLong(PARAM_KEY);
 
         }
     }
@@ -54,7 +48,7 @@ public class CountryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_country, container, false);
         realm = Realm.getDefaultInstance();
 
-        country = realm.where(Country.class).equalTo(FIELD_KEY, key).findFirst();
+        Country country = realm.where(Country.class).equalTo(NUMERIC_CODE_KEY, numericCode).findFirst();
 
         TextView name = v.findViewById(R.id.name);
         name.setText(country.getName());
@@ -65,12 +59,16 @@ public class CountryFragment extends Fragment {
         RealmList<CurrencyOfCountry> currencyList = country.getCurrencies();
         StringBuilder builder = new StringBuilder();
         for (CurrencyOfCountry c : currencyList) {
-            builder.append(c.getSymbol()).append(" ").append(c.getName()).append("\n");
+            builder.append(c.getSymbol()).append(" — ").append(c.getName()).append("\n");
         }
         currencies.setText(builder.toString());
 
         ImageView flag = v.findViewById(R.id.flag);
-       // flag.setImageDrawable();
+
+        App.getSvgBuilder()
+                .load(country.getFlag())
+                .into(flag);
+
         return v;
 
     }

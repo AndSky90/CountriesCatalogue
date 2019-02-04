@@ -25,29 +25,7 @@ public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdap
         this.leadsList = leadsList;
 
     }
-
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView flagImage;
-        private TextView countryTitle;
-
-
-        ViewHolder(LayoutInflater i, ViewGroup parent) {
-            super(i.inflate(R.layout.country_list_item, parent, false));
-
-            flagImage = itemView.findViewById(R.id.flagImage);
-            countryTitle = itemView.findViewById(R.id.countryTitle);
-
-
-            itemView.setOnClickListener(this);
-        }               //itemView - экземпляр данной вью
-
-        @Override
-        public void onClick(View v) {
-            clickListener.onItemClick(countryTitle.getText().toString());
-        }
-    }
-
-    @Override
+   @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(inflater, parent);
@@ -72,6 +50,23 @@ public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdap
     }
 
     public interface ClickListener {
-        void onItemClick(String numericCode);
+        void onItemClick(Long numericCode);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {              ////////////////////
+        private ImageView flagImage;                                                               ////////////////////
+        private TextView countryTitle;                                                              ////////////////////
+
+        ViewHolder(LayoutInflater i, ViewGroup parent) {                                          ////////////////////
+            super(i.inflate(R.layout.country_list_item, parent, false));             ////////////////////
+            flagImage = itemView.findViewById(R.id.flagImage);                                        ////////////////////
+            countryTitle = itemView.findViewById(R.id.countryTitle);                                        ////////////////////
+            itemView.setOnClickListener(this);
+        }               //itemView - экземпляр данной вью
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(Long.valueOf(getAdapterPosition()));
+        }
     }
 }

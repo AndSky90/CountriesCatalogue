@@ -13,6 +13,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="4dp"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/flag" />
 
     <TextView

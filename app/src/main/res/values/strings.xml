@@ -3,6 +3,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="list_of_countries">List of countries:</string>
     <string name="flag">The flag of a country</string>
-    <string name="currency">Currency:</string>
+    <string name="currencies">Currencies:</string>
     <string name="capital">Capital:</string>
+    <string name="splash">Database is empty. Turn on the internet connection.</string>
 </resources>

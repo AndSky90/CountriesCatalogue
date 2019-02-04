@@ -16,10 +16,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        tools:text="name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="name" />
 
     <ImageView
         android:id="@+id/flag"
@@ -28,11 +28,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:contentDescription="@string/flag"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -43,20 +40,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/capital"
+        app:layout_constraintBottom_toTopOf="@+id/capital"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flag" />
+        app:layout_constraintStart_toEndOf="@+id/flag"
+        app:layout_constraintTop_toTopOf="@+id/flag"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/capital"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/currencyTitle"
         app:layout_constraintEnd_toEndOf="@+id/capitalTitle"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/capitalTitle"
         app:layout_constraintTop_toBottomOf="@+id/capitalTitle"
         tools:text="capital" />
@@ -68,6 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/currencies"
+        app:layout_constraintBottom_toTopOf="@+id/currencies"
         app:layout_constraintEnd_toEndOf="@+id/capital"
         app:layout_constraintStart_toStartOf="@+id/capital"
         app:layout_constraintTop_toBottomOf="@+id/capital" />
@@ -77,7 +79,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/flag"
         app:layout_constraintEnd_toEndOf="@+id/currencyTitle"
         app:layout_constraintStart_toStartOf="@+id/currencyTitle"
         app:layout_constraintTop_toBottomOf="@+id/currencyTitle"

@@ -10,7 +10,6 @@ import io.realm.annotations.Required;
 
 public class Country extends RealmObject {
 
-
     @SerializedName("name")
     @Expose
     private String name;
@@ -26,7 +25,7 @@ public class Country extends RealmObject {
     @PrimaryKey                                                     //primary key
     @SerializedName("numericCode")
     @Expose
-    private String numericCode;
+    private Long numericCode;
 
     @SerializedName("currencies")
     @Expose
@@ -36,6 +35,14 @@ public class Country extends RealmObject {
     @Expose
     private String flag;
 
+
+    public Long getNumericCode() {
+        return numericCode;
+    }
+
+    public void setNumericCode(Long numericCode) {
+        this.numericCode = numericCode;
+    }
 
     public String getName() {
         return name;

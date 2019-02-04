@@ -9,7 +9,7 @@
     tools:context=".UI.CountriesListFragment">
 
     <TextView
-        style="@style/HeaderTextStyle"
+        style="@style/Header1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/list_of_countries" />

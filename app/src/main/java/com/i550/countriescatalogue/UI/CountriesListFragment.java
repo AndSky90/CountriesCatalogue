@@ -19,14 +19,6 @@ import com.i550.countriescatalogue.Model.Country;
 import com.i550.countriescatalogue.OnCountryClickListener;
 import com.i550.countriescatalogue.R;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnCountryClickListener} interface
- * to handle interaction events.
- */
-
 public class CountriesListFragment extends Fragment {
 
     private Realm realm;
@@ -41,15 +33,18 @@ public class CountriesListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_list_countries, container, false);
         RecyclerView countriesRecyclerView = v.findViewById(R.id.recycleViewCountries);
 
-        CountriesListAdapter countriesAdapter = new CountriesListAdapter(getContext(), realm.where(Country.class).findAll());
-        countriesAdapter.setOnItemClickListener((key) -> {
+      //  CountriesListAdapter countriesAdapter = new CountriesListAdapter(getContext(), realm.where(Country.class).findAll());               ////////
+
+        RealmAdapter adapter = new RealmAdapter(realm.where(Country.class).findAll());
+
+        adapter.setOnItemClickListener((numericCode) -> {
                     if (mListener != null) {
-                        mListener.onCountryClick(key);
-                        Log.d(MainActivity.TAG, " onClick: " + key);}
+                        mListener.onCountryClick(numericCode);
+                        Log.d(MainActivity.LOGGING_TAG, " onClick: " + numericCode);}
 
         });
         countriesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        countriesRecyclerView.setAdapter(countriesAdapter);
+        countriesRecyclerView.setAdapter(adapter);
         return v;
     }
 

@@ -14,5 +14,5 @@ import android.net.Uri;
  */
 public interface OnCountryClickListener {
     // TODO: Update argument type and name
-    void onCountryClick(String numericCode);
+    void onCountryClick(Long numericCode);
 }

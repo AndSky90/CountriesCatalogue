@@ -3,27 +3,24 @@ package com.i550.countriescatalogue;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import io.realm.Realm;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.internal.EverythingIsNonNull;
 
-import android.net.Uri;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 
+import com.i550.countriescatalogue.Model.Repository;
 import com.i550.countriescatalogue.UI.CountriesListFragment;
-import com.i550.countriescatalogue.Model.Country;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.i550.countriescatalogue.UI.CountryFragment;
+import com.i550.countriescatalogue.UI.SplashFragment;
 
 public class MainActivity extends AppCompatActivity implements OnCountryClickListener {
 
-    ArrayList<Country> listFromJson;
-    public static final String TAG = "LOGGING";
+    public static final String LOGGING_TAG = "LOGGING_TAG";
+    private static final String COUNTRY_TAG = "COUNTRY";
+    private static final String LIST = "LIST";
     FragmentManager fm;
     Fragment container;
     Realm realm;
@@ -33,80 +30,69 @@ public class MainActivity extends AppCompatActivity implements OnCountryClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listFromJson = new ArrayList<>();
-
         realm = Realm.getDefaultInstance();
-
-        if (realm.isEmpty()) {
-            loadDataGlobal();
-        }
-
         fm = getSupportFragmentManager();
         container = fm.findFragmentById(R.id.fragment_container);
+
         if (container == null) {
-            container = new CountriesListFragment();
+            container = new SplashFragment();
             fm.beginTransaction().add(R.id.fragment_container, container).commit();
+        }
+
+        if (realm.isEmpty()) {
+            if (checkInternet()) {
+                Repository.loadDataFromApi();
+                showCountriesListFragment();
+            }
+        } else {
+            showCountriesListFragment();
         }
 
 
      /*   if(savedInstanceState == null) {
-            getSupportFragmentManager()
+            fm
                     .beginTransaction()
                     .add(R.id.edition_container, new MyEditionFragment())
                     .add(R.id.list_container, new MyListFragment())
                     .commit();
         }*/
 
+
+       /* if (container == null) {
+            container = new MainFragment();
+            fm.beginTransaction().add(R.id.fragment_container, container).commit();
+        }*/
+
     }
 
-    private void loadDataGlobal() {
+    private void showCountriesListFragment() {
+        CountriesListFragment countriesListFragment = new CountriesListFragment();
 
-        App.getRetrofitApi().callAllData().enqueue(new Callback<ArrayList<Country>>() {
-            @Override
-            public void onResponse( Call<ArrayList<Country>> call,  Response<ArrayList<Country>> response) {
-                if (response.isSuccessful()) {
-                    listFromJson.clear();
-                    listFromJson.addAll(response.body());
-                    Log.d(TAG, " raw: " + response.raw());
-                    Log.d(TAG, " onResponse response.body(): " + response.body());
+            fm.beginTransaction().remove(container).add(R.id.fragment_container, countriesListFragment, LIST).commit();
+        }
 
-                    realm.beginTransaction();
-                    final List<Country> list = realm.copyToRealmOrUpdate(listFromJson);       //TODO убрать апдейт в конце и проверить что всё верно работает
-                    realm.commitTransaction();
 
-                   /* realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+    private Boolean checkInternet() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 
-                        }
-                    });
-*/
-                } else {
-                    int statusCode = response.code();
-                    try {
-                        Log.e(TAG, "statusCode: " + statusCode + "onResponse response.errorBody(): " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure( Call<ArrayList<Country>> call, Throwable t) {
-                Log.e(TAG, " onFailure: " + call);
-
-            }
-        });
+    @Override
+    public void onCountryClick(Long numericCode) {
+        CountryFragment countryFragment = CountryFragment.newInstance(numericCode);
+        fm.beginTransaction()
+                .hide(fm.findFragmentByTag(LIST))
+                .add(R.id.fragment_container, countryFragment, COUNTRY_TAG)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(COUNTRY_TAG)
+                .commit();
     }
 
     @Override
     protected void onDestroy() {
         realm.close();
         super.onDestroy();
-    }
-
-    @Override
-    public void onCountryClick(String numericCode) {
-
     }
 }
